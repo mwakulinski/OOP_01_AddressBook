@@ -2,11 +2,6 @@
 
 <br>
 
-## Wymagana wiedza
-- Podstawy Javascript
-- Podstawy Typescript
-- Podstawy Object Oriented Programming(OOP)
- 
 ## Technologie potrzebne do zadania
 
 - Typescript
