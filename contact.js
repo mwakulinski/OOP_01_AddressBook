@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const Validator = require("./validator");
 
 class Contact {
   #id;
@@ -16,6 +17,7 @@ class Contact {
     if (this._name) {
       this.#modificationDate = new Date();
     }
+    Validator.throwIfNotString(value);
     this._name = value;
   }
 
@@ -27,6 +29,7 @@ class Contact {
     if (this._surname) {
       this.#modificationDate = new Date();
     }
+    Validator.throwIfNotString(value);
     this._surname = value;
   }
 
@@ -38,6 +41,8 @@ class Contact {
     if (this._email) {
       this.#modificationDate = new Date();
     }
+    Validator.throwIfNotString(value);
+    Validator.throwIfNotEmail(value);
     this._emial = value;
   }
 
@@ -57,6 +62,18 @@ class Contact {
     return this.#id;
   }
 
+  hasProperty(property) {
+    Validator.throwIfNotExists(property);
+    const properiesToCheck = `${this.name} ${this.surname} ${this.email} ${
+      this.#id
+    }`;
+    const regExpToCheck = new RegExp(`.*${property}.*`, "gi");
+    if (regExpToCheck.test(properiesToCheck)) {
+      return true;
+    }
+    return false;
+  }
+
   displayProperies() {
     console.log({
       name: this._name,
@@ -72,4 +89,6 @@ class Contact {
   // Ma umożliwiać: aktualizację datę modyfikacji, pozwalac na modyfikację imienia, nazwiska oraz adresu email
 }
 
+const contact1 = new Contact("MIchal", "Wakulinski", "michal.wak@op.pl");
+console.log(contact1.hasProperty("michal kulinski"));
 module.exports = Contact;
