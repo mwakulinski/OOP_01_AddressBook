@@ -1,4 +1,4 @@
-const { Contact, Group, AddressBook } = require("./adress-book");
+const { Contact, Group, AddressBook } = require("./contact");
 
 const contact1 = new Contact("Michal", "Wakulinski", "email.com");
 const group = new Group();
