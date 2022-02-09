@@ -62,7 +62,7 @@ class Contact {
     return this.#id;
   }
 
-  hasProperty(property) {
+  checkIfHaveProperty(property) {
     Validator.throwIfNotExists(property);
     const properiesToCheck = `${this.name} ${this.surname} ${this.email} ${
       this.#id
@@ -89,6 +89,4 @@ class Contact {
   // Ma umożliwiać: aktualizację datę modyfikacji, pozwalac na modyfikację imienia, nazwiska oraz adresu email
 }
 
-const contact1 = new Contact("MIchal", "Wakulinski", "michal.wak@op.pl");
-console.log(contact1.hasProperty("michal kulinski"));
 module.exports = Contact;
