@@ -84,12 +84,8 @@ class Group {
   //
 
   addContact(contact) {
-    Validation.throwIfAlreadyExists(
-      this.contact,
-      contact.name,
-      contact.surname
-    );
-    Validation.throwIfNotProperContact(contact);
+    Validator.throwIfAlreadyExists(this.contact, contact.name, contact.surname);
+    Validator.throwIfNotProperContact(contact);
 
     this.contact.push(contact);
   }
@@ -103,7 +99,7 @@ class Group {
   }
 
   deleteContact(contact) {
-    Validation.throwIfNotProperContact(contact);
+    Validator.throwIfNotProperContact(contact);
     this.contact.splice(this.contact.indexOf(contact, 1));
   }
 }
@@ -119,13 +115,13 @@ class AddressBook {
   }
 
   addNewContact(name, surname, email) {
-    Validation.throwIfNotString(name, surname, email);
-    Validation.throwIfAlreadyExists(this.contact, name, surname);
+    Validator.throwIfNotString(name, surname, email);
+    Validator.throwIfAlreadyExists(this.contact, name, surname);
     this.contact.push(new Contact(name, surname, email));
   }
 
   deleteContact(contact) {
-    Validation.throwIfNotProperContact(contact);
+    Validator.throwIfNotProperContact(contact);
     //usunac z innych grup[]
     //czy kotnatk jest
     this.contact.splice(this.contact.indexOf(contact, 1));
@@ -145,51 +141,19 @@ class AddressBook {
 
   //jest?niema?
   addNewGroup(name) {
-    Validation.throwIfNotString(name);
-    Validation.throwIfAlreadyExists(this.group, name);
+    Validator.throwIfNotString(name);
+    Validator.throwIfAlreadyExists(this.group, name);
     this.group.push(new Group(name));
   }
 
   deleteGroup(group) {
-    Validation.throwIfNotExists(group);
-    Validation.throwIfNotProperGroup(group);
+    Validator.throwIfNotExists(group);
+    Validator.throwIfNotProperGroup(group);
     this.group.splice(this.group.indexOf(group, 1));
   }
 
   // Ma mieć: listę wszystkich kontaktów, listę grup kontaktów
   // Ma umożliwiać: szukanie kontaktu po frazie, dodawanie/usuwanie/modyfikacje nowych kontaktów, dodawanie/usuwanie/modyfikacje nowych grup
-}
-
-class Validation {
-  static throwIfNotProperContact = (contact) => {
-    if (!(contact instanceof Contact) || !contact.name || !contact.surname) {
-      throw new Error(`Can not perform action, object is not proper type`);
-    }
-  };
-
-  static throwIfNotProperGroup = (group) => {
-    if (!(group instanceof Group) || !group.name) {
-      throw new Error(`Can not perform action, object is not proper type`);
-    }
-  };
-
-  static throwIfNotExists = (data) => {
-    if (!data) {
-      throw new Error("Such an object does not exist");
-    }
-  };
-
-  static throwIfNotString = (...args) => {
-    if (args.some((item) => typeof item !== "string")) {
-      throw new Error("Name, surname and email must be strings");
-    }
-  };
-
-  static throwIfAlreadyExists = (arr, name, surname) => {
-    if (arr.some((item) => item.name === name && item.surname === surname)) {
-      throw new Error("Sucha an object already exists");
-    }
-  };
 }
 
 module.exports = { Contact, Group, AddressBook };
