@@ -1,49 +1,68 @@
-//addToGroup
-//deleteFromGroup
+const Validator = require("./validator");
+const Group = require("./group");
+const Contact = require("./contact");
+
 class AddressBook {
   constructor() {
-    this.contact = [];
+    this.contacts = [];
     this.groups = [];
   }
 
   addNewContact(name, surname, email) {
     Validator.throwIfNotString(name, surname, email);
-    Validator.throwIfAlreadyExists(this.contact, name, surname);
-    this.contact.push(new Contact(name, surname, email));
+    if (!this.findContact(`${name} ${surname}`)) {
+      this.contacts.push(new Contact(name, surname, email));
+    }
   }
 
   deleteContact(contact) {
-    Validator.throwIfNotProperContact(contact);
-    //usunac z innych grup[]
-    //czy kotnatk jest
-    this.contact.splice(this.contact.indexOf(contact, 1));
+    Validator.throwIfNotProperInstance(contact, Contact);
+    if (this.findContact(`${contact.name} ${contact.surname}`)) {
+      this.contacts.splice(this.contacts.indexOf(contact), 1);
+      this.groups.forEach((group) => group.deleteContact(contact));
+    }
+  }
+
+  addContactToGroup(groupName, contact) {
+    Validator.throwIfNotString(groupName);
+    const group = this.findGroup(groupName);
+    Validator.throwIfNotProperInstance(group, Group);
+    Validator.throwIfNotProperInstance(contact, Contact);
+    if (!group.findContact(`${contact.name} ${contact.surname}`)) {
+      group.addContact(contact);
+    }
+  }
+
+  deleteContactFromGroup(groupName, contact) {
+    Validator.throwIfNotString(groupName, contactName, contactSurname);
+    Validator.throwIfNotProperInstance(contact, Contact);
+
+    const group = this.findGroup(groupName);
+    Validator.throwIfNotProperInstance(group, Group);
+    group.splice(group.indexOf(contact), 1);
   }
 
   findContact(phrase) {
-    const regExpToCheck = RegExp(`.*${phrase}.*`, "gi");
-
-    //poprawka - do kontaktu
-    return (
-      this.contact?.find((contact) => {
-        const valuesString = Object.values(contact).join(" ");
-        return regExpToCheck.test(valuesString);
-      }) ?? "There is no such contact"
-    );
+    return this.contacts.find((contact) => contact.checkIfHaveProperty(phrase));
   }
 
-  //jest?niema?
   addNewGroup(name) {
     Validator.throwIfNotString(name);
-    Validator.throwIfAlreadyExists(this.group, name);
-    this.group.push(new Group(name));
+    if (!this.findGroup(name)) {
+      this.groups.push(new Group(name));
+    }
   }
 
-  deleteGroup(group) {
-    Validator.throwIfNotExists(group);
-    Validator.throwIfNotProperGroup(group);
-    this.group.splice(this.group.indexOf(group, 1));
+  deleteGroup(name) {
+    Validator.throwIfNotString(name);
+    if (!this.findGroup(name)) {
+      this.groups.splice(this.groups.indexOf(group), 1);
+    }
   }
 
-  // Ma mieć: listę wszystkich kontaktów, listę grup kontaktów
-  // Ma umożliwiać: szukanie kontaktu po frazie, dodawanie/usuwanie/modyfikacje nowych kontaktów, dodawanie/usuwanie/modyfikacje nowych grup
+  findGroup(name) {
+    return this.groups.find((group) => group.name === name);
+  }
 }
+
+module.exports = AddressBook;

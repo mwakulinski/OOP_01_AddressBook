@@ -1,31 +1,25 @@
 class Validator {
-  static throwIfNotProperContact = (contact) => {
-    if (!(contact instanceof Contact) || !contact.name || !contact.surname) {
-      throw new Error(`Can not perform action, object is not proper type`);
-    }
-  };
-
-  static throwIfNotProperGroup = (group) => {
-    if (!(group instanceof Group) || !group.name) {
-      throw new Error(`Can not perform action, object is not proper type`);
-    }
-  };
-
-  static throwIfNotExists = (data) => {
-    if (!data) {
-      throw new Error("Such an object does not exist");
+  static throwIfNotProperInstance = (instance, classType) => {
+    if (!(instance instanceof classType)) {
+      throw new Error(
+        `Can not perform action, object shall be of type ${classType.name}`
+      );
     }
   };
 
   static throwIfNotString = (...args) => {
-    if (args.some((item) => typeof item !== "string")) {
-      throw new Error("Name, surname and email must be strings");
+    if (args.some((item) => typeof item !== "string" || item.length === 0)) {
+      throw new Error(`Input data must be a string type`);
     }
   };
 
-  static throwIfAlreadyExists = (arr, name, surname) => {
-    if (arr.some((item) => item.name === name && item.surname === surname)) {
-      throw new Error("Sucha an object already exists");
-    }
-  };
+  static throwIfNotEmail(value) {
+    const regExpToCheckIfEmail = new RegExp(
+      "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$"
+    );
+    if (!regExpToCheckIfEmail.test(value))
+      throw new Error("Please provide a valid email");
+  }
 }
+
+module.exports = Validator;

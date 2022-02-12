@@ -24,43 +24,30 @@ class Group {
 
   addContact(contact) {
     Validator.throwIfNotProperInstance(contact, Contact);
-    this.throwIfContactExists(contact);
-
-    this.contacts.push(contact);
+    if (!this.findContact(`${contact.name} ${contact.surname}`)) {
+      this.contacts.push(contact);
+    }
   }
 
   deleteContact(contact) {
     Validator.throwIfNotProperInstance(contact, Contact);
-    this.throwIfContactNotExists(contact);
-    this.contacts.splice(this.contacts.indexOf(contact), 1);
-  }
-
-  checkIfHaveContact(property) {
-    return this.contacts.some((contact) =>
-      contact.checkIfHaveProperty(property)
-    );
-  }
-
-  throwIfContactExists(contact) {
-    if (this.checkIfHaveContact(`${contact.name} ${contact.surname}`)) {
-      throw new Error("Such a contact already exists");
+    if (this.findContact(`${contact.name} ${contact.surname}`)) {
+      this.contacts.splice(this.contacts.indexOf(contact), 1);
     }
   }
 
-  throwIfContactNotExists(contact) {
-    if (!this.checkIfHaveContact(`${contact.name} ${contact.surname}`)) {
-      throw new Error("Such a contact does not exist in this group");
-    }
+  findContact(phrase) {
+    return this.contacts.find((contact) => contact.checkIfHaveProperty(phrase));
   }
 }
 
-const contact1 = new Contact("MIchal", "Wakulinski", "michal.wak@op.pl");
-const contact2 = new Contact("Barbara", "Wakulinski", "michal.wak@op.pl");
-const group = new Group("Barany");
-group.addContact(contact1);
-group.addContact(contact2);
-group.deleteContact(contact1);
-group.deleteContact(contact1);
-console.log(group);
+// const contact1 = new Contact("MIchal", "Wakulinski", "michal.wak@op.pl");
+// const contact2 = new Contact("Barbara", "Wakulinski", "michal.wak@op.pl");
+// const group = new Group("Barany");
+// group.addContact(contact1);
+// group.addContact(contact2);
+// group.deleteContact(contact1);
+// group.deleteContact(contact1);
+// console.log(group);
 
 module.exports = Group;

@@ -62,13 +62,14 @@ class Contact {
     return this.#id;
   }
 
-  checkIfHaveProperty(property) {
-    Validator.throwIfNotExists(property);
-    const properiesToCheck = `${this.name} ${this.surname} ${this.email} ${
+  checkIfHaveProperty(phrase) {
+    Validator.throwIfNotString(phrase);
+
+    const instanceProperies = `${this.name} ${this.surname} ${this.email} ${
       this.#id
     }`;
-    const regExpToCheck = new RegExp(`.*${property}.*`, "gi");
-    if (regExpToCheck.test(properiesToCheck)) {
+    const regExpToCheck = new RegExp(`.*${phrase}.*`, "gi");
+    if (regExpToCheck.test(instanceProperies)) {
       return true;
     }
     return false;
