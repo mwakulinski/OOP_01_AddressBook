@@ -9,7 +9,6 @@ group.addContact(contact1);
 const addressbook = new AddressBook();
 addressbook.addNewGroup("Praca");
 console.log(addressbook);
-addressbook.addNewGroup("Kurwa");
 addressbook.addNewGroup("Koledzy");
 console.log(addressbook);
 addressbook.addNewContact("Anna", "Wanna", "Ann@Wan.pl");
