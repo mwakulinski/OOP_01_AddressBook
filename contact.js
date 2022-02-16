@@ -2,14 +2,13 @@ const { v4: uuidv4 } = require("uuid");
 const Validator = require("./validator");
 
 class Contact {
-  #id;
   #creationDate;
   #modificationDate;
   constructor(name, surname, email) {
     this.name = name;
     this.surname = surname;
     this.email = email;
-    this.#id = uuidv4();
+    this.id = uuidv4();
     this.#creationDate = new Date();
   }
 
@@ -43,47 +42,26 @@ class Contact {
     }
     Validator.throwIfNotString(value);
     Validator.throwIfNotEmail(value);
-    this._emial = value;
+    this._email = value;
   }
 
   get email() {
-    return this._emial;
-  }
-
-  get creationDate() {
-    return this.#creationDate;
+    return this._email;
   }
 
   get modificationDate() {
     return this.#modificationDate;
   }
 
-  get id() {
-    return this.#id;
+  get creationDate() {
+    return this.#creationDate;
   }
 
-  checkIfHaveProperty(phrase) {
+  checkIfContainPhrase(phrase) {
     Validator.throwIfNotString(phrase);
-
-    const instanceProperies = `${this.name} ${this.surname} ${this.email} ${
-      this.#id
-    }`;
+    const instanceProperies = `${this.name} ${this.surname} ${this.email} ${this.id}`;
     const regExpToCheck = new RegExp(`.*${phrase}.*`, "gi");
-    if (regExpToCheck.test(instanceProperies)) {
-      return true;
-    }
-    return false;
-  }
-
-  displayProperies() {
-    console.log({
-      name: this._name,
-      surname: this._surname,
-      email: this._emial,
-      id: this.#id,
-      creationDate: this.#creationDate,
-      modificationDate: this.#modificationDate,
-    });
+    return regExpToCheck.test(instanceProperies);
   }
 
   // Ma mieć: Imie, Nazwisko, adres-emial, datę modyfikacji i utworzenia, uuid

@@ -6,11 +6,10 @@ const Contact = require("./contact");
 // Ma umożliwiać: zmianę nazwy grupy, można dodać lub usunac kontakt z grupy, można sprawdzić czy kontakt istnieje w grupie
 
 class Group {
-  #id;
   constructor(name) {
     this.name = name;
     this.contacts = [];
-    this.#id = uuidv4();
+    this.id = uuidv4();
   }
 
   set name(input) {
@@ -24,20 +23,30 @@ class Group {
 
   addContact(contact) {
     Validator.throwIfNotProperInstance(contact, Contact);
-    if (!this.findContact(`${contact.name} ${contact.surname}`)) {
+
+    //po idku
+    //pytanie lepiej wyrzucić error, czy pominąć akcję jak program znajdzie już istniejący kontakt
+    if (!this.findContact(`${contact.id}`)) {
       this.contacts.push(contact);
+    } else {
+      throw new Error(`Such a contact already exist`);
     }
   }
 
-  deleteContact(contact) {
-    Validator.throwIfNotProperInstance(contact, Contact);
-    if (this.findContact(`${contact.name} ${contact.surname}`)) {
-      this.contacts.splice(this.contacts.indexOf(contact), 1);
+  //w sumie czemu filter lepszy?
+  deleteContact(contactId) {
+    Validator.throwIfNotString(contactId);
+    if (this.findContact(`${contactId}`)) {
+      this.contacts = this.contacts.filter(
+        (contact) => contact.id !== contactId
+      );
     }
   }
 
   findContact(phrase) {
-    return this.contacts.find((contact) => contact.checkIfHaveProperty(phrase));
+    return this.contacts.find((contact) =>
+      contact.checkIfContainPhrase(phrase)
+    );
   }
 }
 
@@ -46,8 +55,9 @@ class Group {
 // const group = new Group("Barany");
 // group.addContact(contact1);
 // group.addContact(contact2);
-// group.deleteContact(contact1);
-// group.deleteContact(contact1);
+// group.deleteContact(contact1.id);
+// // group.deleteContact(contact1);
+// // group.deleteContact(contact2);
 // console.log(group);
 
 module.exports = Group;

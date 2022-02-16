@@ -18,7 +18,7 @@ class Validator {
       "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$"
     );
     if (!regExpToCheckIfEmail.test(value))
-      throw new Error("Please provide a valid email");
+      throw new Error(`${value} is not valid email`);
   }
 }
 

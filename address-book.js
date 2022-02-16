@@ -15,35 +15,41 @@ class AddressBook {
     }
   }
 
-  deleteContact(contact) {
-    Validator.throwIfNotProperInstance(contact, Contact);
-    if (this.findContact(`${contact.name} ${contact.surname}`)) {
-      this.contacts.splice(this.contacts.indexOf(contact), 1);
-      this.groups.forEach((group) => group.deleteContact(contact));
+  //dlaczego tutaj splice jest ok?
+  deleteContact(contactId) {
+    Validator.throwIfNotString(contactId);
+    const contactToDelete = this.findContact(`${contactId}`);
+    if (contactToDelete) {
+      // this.contacts.splice(this.contacts.indexOf(contact), 1);
+      this.contacts = this.contacts.filter(
+        (contact) => contact !== contactToDelete
+      );
+      this.groups.forEach((group) => group.deleteContact(contactId));
     }
   }
 
   addContactToGroup(groupName, contact) {
     Validator.throwIfNotString(groupName);
-    const group = this.findGroup(groupName);
-    Validator.throwIfNotProperInstance(group, Group);
     Validator.throwIfNotProperInstance(contact, Contact);
-    if (!group.findContact(`${contact.name} ${contact.surname}`)) {
+    const group = this.findGroup(groupName);
+
+    if (!group) {
+      throw new Error(`Groupe named ${groupName} does not exist`);
+    }
+    if (!group.findContact(`${contact.Id}`)) {
       group.addContact(contact);
+    } else {
+      throw new Error("Such a contact does not exist");
     }
   }
 
-  deleteContactFromGroup(groupName, contact) {
-    Validator.throwIfNotString(groupName, contactName, contactSurname);
-    Validator.throwIfNotProperInstance(contact, Contact);
-
+  deleteContactFromGroup(groupName, contactId) {
+    Validator.throwIfNotString(groupName, contactId);
     const group = this.findGroup(groupName);
-    Validator.throwIfNotProperInstance(group, Group);
-    group.splice(group.indexOf(contact), 1);
-  }
-
-  findContact(phrase) {
-    return this.contacts.find((contact) => contact.checkIfHaveProperty(phrase));
+    if (!group.findContact(contactId)) {
+      throw new Error(`Such a contact does not exist in group ${groupName}`);
+    }
+    group.deleteContact(contactId);
   }
 
   addNewGroup(name) {
@@ -62,6 +68,12 @@ class AddressBook {
 
   findGroup(name) {
     return this.groups.find((group) => group.name === name);
+  }
+
+  findContact(phrase) {
+    return this.contacts.find((contact) =>
+      contact.checkIfContainPhrase(phrase)
+    );
   }
 }
 
