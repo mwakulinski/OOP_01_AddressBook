@@ -26,7 +26,7 @@ class Group {
 
     //po idku
     //pytanie lepiej wyrzucić error, czy pominąć akcję jak program znajdzie już istniejący kontakt
-    if (!this.findContact(`${contact.id}`)) {
+    if (!this.findContact(contact.id)) {
       this.contacts.push(contact);
     } else {
       throw new Error(`Such a contact already exist`);
@@ -36,11 +36,7 @@ class Group {
   //w sumie czemu filter lepszy?
   deleteContact(contactId) {
     Validator.throwIfNotString(contactId);
-    if (this.findContact(`${contactId}`)) {
-      this.contacts = this.contacts.filter(
-        (contact) => contact.id !== contactId
-      );
-    }
+    this.contacts = this.contacts.filter((contact) => contact.id !== contactId);
   }
 
   findContact(phrase) {
