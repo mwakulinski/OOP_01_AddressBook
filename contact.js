@@ -13,10 +13,10 @@ class Contact {
   }
 
   set name(value) {
+    Validator.throwIfNotString(value);
     if (this._name) {
       this.#modificationDate = new Date();
     }
-    Validator.throwIfNotString(value);
     this._name = value;
   }
 
@@ -25,10 +25,11 @@ class Contact {
   }
 
   set surname(value) {
+    Validator.throwIfNotString(value);
     if (this._surname) {
       this.#modificationDate = new Date();
     }
-    Validator.throwIfNotString(value);
+
     this._surname = value;
   }
 
@@ -37,11 +38,12 @@ class Contact {
   }
 
   set email(value) {
+    Validator.throwIfNotString(value);
+    Validator.throwIfNotEmail(value);
     if (this._email) {
       this.#modificationDate = new Date();
     }
-    Validator.throwIfNotString(value);
-    Validator.throwIfNotEmail(value);
+
     this._email = value;
   }
 
