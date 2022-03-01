@@ -15,12 +15,10 @@ class AddressBook {
     }
   }
 
-  //dlaczego tutaj splice jest ok?
   deleteContact(contactId) {
     Validator.throwIfNotString(contactId);
-    const contactToDelete = this.findContact(`${contactId}`);
+    const contactToDelete = this.findContact(contactId);
     if (contactToDelete) {
-      // this.contacts.splice(this.contacts.indexOf(contact), 1);
       this.contacts = this.contacts.filter(
         (contact) => contact !== contactToDelete
       );
@@ -36,19 +34,12 @@ class AddressBook {
     if (!group) {
       throw new Error(`Groupe named ${groupName} does not exist`);
     }
-    if (!group.findContact(`${contact.Id}`)) {
-      group.addContact(contact);
-    } else {
-      throw new Error("Such a contact does not exist");
-    }
+    group.addContact(contact);
   }
 
   deleteContactFromGroup(groupName, contactId) {
     Validator.throwIfNotString(groupName, contactId);
     const group = this.findGroup(groupName);
-    if (!group.findContact(contactId)) {
-      throw new Error(`Such a contact does not exist in group ${groupName}`);
-    }
     group.deleteContact(contactId);
   }
 
